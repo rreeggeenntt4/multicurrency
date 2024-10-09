@@ -170,3 +170,6 @@ composer test
 ```bash
 vendor/bin/php-cs-fixer fix C:\OSPanel\home\multicurrency\bank\multicurrency --dry-run --diff
 ```
+
+### Видеообзор
+https://youtu.be/dwB97jamLpA?feature=shared
