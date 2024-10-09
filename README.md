@@ -118,7 +118,7 @@ multicurrency/
 ### Установка и запуск тестов
 Установка зависимостей через Composer
 
-Создайте composer.json:
+composer.json:
 ```json
 {
     "name": "bank/multicurrency",
@@ -148,7 +148,7 @@ multicurrency/
     "minimum-stability": "stable"
 }
 ```
-Затем выполните команды:
+Выполните команды:
 ```bash
 composer install
 ```
