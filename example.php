@@ -106,7 +106,7 @@ echo "==========" . PHP_EOL;
 // рублевую часть счета в EUR, и запрашивает баланс
 // Списание с баланса
 try {
-    $densredstva = 1000; // RUB 
+    $densredstva = 1000; // RUB
     $account->withdraw($densredstva, 'RUB'); // Списываем 1000 RUB
     echo "Списание прошло успешно. Новый баланс RUB: " . $account->getBalance('RUB') . "\n";
     $densredstva_eur = $densredstva / $eurToRub;
