@@ -99,7 +99,7 @@ $account->setBaseCurrency('EUR');
 // Проверка, установилась ли основная валюта
 echo "Основная валюта: " . $account->getBaseCurrency()->getCode() . "\n"; // Должно вывести 'EUR'
 // Получение текущего баланса в новой основной валюте
-echo "Текущий баланс: " . $account->getAllBalances() . " " . $account->getBaseCurrency()->getCode() . "\n";
+echo "Текущий баланс: " . $account->getBalance('EUR');
 echo "==========" . PHP_EOL;
 
 // 7. Чтобы избежать дальнего ослабления рубля клиент решает сконвертировать

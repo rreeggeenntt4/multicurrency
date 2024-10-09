@@ -92,6 +92,28 @@ class MultiCurrencyAccount
     }
 
     /**
+     * Получить общий баланс в текущей основной валюте
+     *
+     * @return float
+     */
+    public function getTotalBalanceInBaseCurrency(): float
+    {
+        $totalBalance = 0.0;
+        $baseCurrencyCode = $this->baseCurrency->getCode();
+        
+        foreach ($this->balances as $currencyCode => $money) {
+            if ($currencyCode === $baseCurrencyCode) {
+                $totalBalance += $money->getAmount();
+            } else {
+                $rate = $this->exchangeRateProvider->getRate($currencyCode, $baseCurrencyCode);
+                $totalBalance += $money->getAmount() * $rate;
+            }
+        }
+        
+        return $totalBalance;
+    }
+
+    /**
      * Получить объект Money для заданной валюты
      *
      * @param string $currencyCode

@@ -164,3 +164,9 @@ composer install
 ```bash
 composer test
 ```
+
+Запуск PHP CS Fixer в режиме "dry-run" (т.е. без внесения изменений), чтобы увидеть, какие изменения будут предложены. <br>
+Поменяйте C:\OSPanel\home\multicurrency\bank\multicurrency на свой путь.
+```bash
+vendor/bin/php-cs-fixer fix C:\OSPanel\home\multicurrency\bank\multicurrency --dry-run --diff
+```
