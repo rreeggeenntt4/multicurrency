@@ -1,4 +1,5 @@
 <?php
+
 // Включаем строгую типизацию
 declare(strict_types=1);
 
