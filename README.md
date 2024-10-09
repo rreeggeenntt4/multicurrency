@@ -153,13 +153,6 @@ multicurrency/
 composer install
 ```
 
-Запуск тестов:<br>
-Добавьте в composer.json скрипт для тестов:
-```json
-"scripts": {
-    "test": "phpunit"
-}
-```
 Запустите тесты:
 ```bash
 composer test
