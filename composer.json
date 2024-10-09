@@ -1,0 +1,27 @@
+{
+    "name": "bank/multicurrency",
+    "description": "Мультивалютный счет.",
+    "type": "project",
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "10.5.35",
+        "friendsofphp/php-cs-fixer": "^3.64"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bank\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bank\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "license": "MIT", 
+    "minimum-stability": "stable"
+}
