@@ -39,7 +39,23 @@ class MultiCurrencyAccount
         if ($code === $this->baseCurrency->getCode()) {
             throw new \InvalidArgumentException("Невозможно удалить основную валюту счета.");
         }
+
+        // Проверить, достаточно ли средств для конвертации
+        $balance = $this->getBalance($code);
+        if ($balance > 0) {
+            // Конвертировать все средства в основную валюту
+            $this->convert($balance, $code, $this->baseCurrency->getCode());
+        }
+
+        // Удалить валюту после конвертации
         unset($this->balances[$code]);
+    }
+
+
+    // Список поддерживаемых валют
+    public function getSupportedCurrencies(): array
+    {
+        return array_keys($this->balances);
     }
 
     public function setBaseCurrency(string $code): void
@@ -91,27 +107,21 @@ class MultiCurrencyAccount
         return $this->getMoney($currencyCode)->getAmount();
     }
 
-    /**
-     * Получить общий баланс в текущей основной валюте
-     *
-     * @return float
-     */
-    public function getTotalBalanceInBaseCurrency(): float
+    public function convert(float $amount, string $fromCurrencyCode, string $toCurrencyCode): void
     {
-        $totalBalance = 0.0;
-        $baseCurrencyCode = $this->baseCurrency->getCode();
-        
-        foreach ($this->balances as $currencyCode => $money) {
-            if ($currencyCode === $baseCurrencyCode) {
-                $totalBalance += $money->getAmount();
-            } else {
-                $rate = $this->exchangeRateProvider->getRate($currencyCode, $baseCurrencyCode);
-                $totalBalance += $money->getAmount() * $rate;
-            }
-        }
-        
-        return $totalBalance;
+        // Проверить, достаточно ли средств для списания
+        $this->withdraw($amount, $fromCurrencyCode);
+
+        // Получить курс конвертации
+        $rate = $this->exchangeRateProvider->getRate($fromCurrencyCode, $toCurrencyCode);
+
+        // Рассчитать сумму в целевой валюте
+        $convertedAmount = $amount * $rate;
+
+        // Пополнить счет в целевой валюте
+        $this->deposit($convertedAmount, $toCurrencyCode);
     }
+
 
     /**
      * Получить объект Money для заданной валюты

@@ -97,31 +97,45 @@ echo "==========" . PHP_EOL;
 // Установка основной валюты в EUR
 $account->setBaseCurrency('EUR');
 // Проверка, установилась ли основная валюта
-echo "Основная валюта: " . $account->getBaseCurrency()->getCode() . "\n"; // Должно вывести 'EUR'
-// Получение текущего баланса в новой основной валюте
-echo "Текущий баланс: " . $account->getBalance('EUR');
+echo "Основная валюта: " . $account->getBaseCurrency()->getCode() . PHP_EOL; // Должно вывести 'EUR'
+// Получение текущего баланса счета в новой основной валюте EUR, в задании не указано что нужно вывести общий баланс, поэтому выводим баланс в валюте EUR
+echo "Текущий баланс: " . $account->getBalance($account->getBaseCurrency()->getCode()) . PHP_EOL;
 echo "==========" . PHP_EOL;
 
 // 7. Чтобы избежать дальнего ослабления рубля клиент решает сконвертировать
 // рублевую часть счета в EUR, и запрашивает баланс
 // Списание с баланса
 try {
-    $account->withdraw(1000, 'RUB'); // Списываем 1000 RUB
+    $densredstva = 1000; // RUB 
+    $account->withdraw($densredstva, 'RUB'); // Списываем 1000 RUB
     echo "Списание прошло успешно. Новый баланс RUB: " . $account->getBalance('RUB') . "\n";
+    $densredstva_eur = $densredstva / $eurToRub;
+    $account->deposit($densredstva_eur, 'EUR');
 } catch (\InvalidArgumentException $e) {
     echo "Ошибка: " . $e->getMessage() . "\n";
 }
+echo "Текущий баланс: " . $account->getBalance($account->getBaseCurrency()->getCode()) . PHP_EOL;
 
 
+// Вывод балансов
+print_r($account->getAllBalances());
+
+// 8. Банк меняет курс валюты для EUR к RUB на 120
+$rateProvider->setRate('EUR/RUB', 120.0); // Устанавливаем курс EUR к RUB
 
 
+// 9. После изменения курса клиент проверяет, что баланс его счета не изменился
+echo "Текущий баланс: " . $account->getBalance($account->getBaseCurrency()->getCode()) . PHP_EOL;
 
-// Попытка списания 11 USD, при наличии только 10 USD
-try {
-    $account->withdraw(11, 'USD');
-} catch (\InvalidArgumentException $e) {
-    echo "Ошибка: " . $e->getMessage() . PHP_EOL;
-}
+
+// 10. Банк решает, что не может больше поддерживать обслуживание следующих валют EUR и USD. Согласовывает с клиентом изменение основной валюты счета на RUB, с конвертацией балансов неподдерживаемых валют.
+// Установка основной валюты в RUB
+$account->setBaseCurrency('RUB');
+$account->removeCurrency('EUR');
+$account->removeCurrency('USD');
+// Список поддерживаепмых валют
+print_r($account->getSupportedCurrencies());
+
 
 // Вывод балансов
 print_r($account->getAllBalances());
